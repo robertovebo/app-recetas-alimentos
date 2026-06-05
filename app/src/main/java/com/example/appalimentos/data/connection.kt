@@ -47,7 +47,7 @@ class MySqlConnection{
     suspend fun register(email:String, passwordRaw : String) : Boolean = withContext(Dispatchers.IO)
     {
         val conn = connect() ?: return@withContext false //VARIABLE QUE GUARDA LA CONEXION A LA BASE DE DATOS
-        val query = "INSERT INTO _user(passwrd, email, is_verified, verification_code) VALUES (?,?.0,?)" //QUERY PARA LA BASE DE DATOS
+        val query = "INSERT INTO _user(passwrd, email, is_verified, verification_code) VALUES (?,?,?,?)" //QUERY PARA LA BASE DE DATOS
 
         //TRY CATCH PARA LA LLAMADA A LA BASE DE DATOS
         try {
@@ -58,7 +58,8 @@ class MySqlConnection{
             val stm = conn.prepareStatement(query)
             stm.setString(1, passwordHashed)
             stm.setString(2, email)
-            stm.setString(3,verificationCode)
+            stm.setInt(3,0)
+            stm.setString(4,verificationCode)
 
             val rowInserted = stm.executeUpdate()
             conn.close()
@@ -67,7 +68,7 @@ class MySqlConnection{
             if(rowInserted > 0){
 
                 //LLAMADA A LA FUNCION
-                SendVerificationEmail(email,verificationCode)
+                sendVerificationEmail(email,verificationCode)
                 return@withContext true
             }
 
@@ -80,7 +81,7 @@ class MySqlConnection{
 
     //ULTIMOS CAMBIOS 05-06-2026
     //FUNCION QUE ENVIA CORREO DE VERIFICACION
-    private fun SendVerificationEmail(destiniyEmail: String, code: String){
+    private fun sendVerificationEmail(destinyEmail: String, code: String){
 
         //CUENTA DE GOOGLE DESDE DONDE SE ENVIARA EL CORREO AL USUARIO
         val senderEmail = "nutrirecetasauth@gmail.com" //CORREO DE LA CUENTA DE GOOGLE
@@ -105,7 +106,7 @@ class MySqlConnection{
         try {
             val message = MimeMessage(session).apply {
                 setFrom(InternetAddress(senderEmail))
-                addRecipient(Message.RecipientType.TO, InternetAddress(destiniyEmail))
+                addRecipient(Message.RecipientType.TO, InternetAddress(destinyEmail))
                 subject = "Código de verificación - NutriRecetas"
                 setText("!Hola¡ Tu código de verificación para activar tu cuenta es:  $code\n\nNo lo compartas con nadie")
             }
@@ -113,6 +114,43 @@ class MySqlConnection{
 
         }catch(e : Exception){
             e.printStackTrace()
+        }
+
+    }
+
+    //FUNCION QUE VERIFICA EL CODIGO ENVIADO
+    suspend fun verifyCode(destinyEmail : String, codeWritten: String): Boolean  = withContext(Dispatchers.IO)
+    {
+        val conn = connect() ?: return@withContext false
+
+        //QUERY PARA BUSCAR QUE EL USUARIO EXISTA
+        val query = "SELECT * FROM _user WHERE email = ? AND verification_code = ?"
+
+        //QUERY PARA ACTUALIZAR EL ESTADO DE VERIFICACION DEL USUARIO Y BORRA EL CODIGO DE VERIFICACION
+        val updateQuery = "UPDATE _user SET is_verified = 1, verification_code = NULL WHERE email = ?"
+
+        try {
+
+            val stm = conn.prepareStatement(query)
+            stm.setString(1, destinyEmail)
+            stm.setString(2, codeWritten)
+
+            val resultSet = stm.executeQuery()
+
+            //SI EXISTE UN REGISTRO ENTRA AL BLOQUE
+            if(resultSet.next()){
+                val updateStm = conn.prepareStatement(updateQuery)
+                updateStm.setString(1, destinyEmail)
+                updateStm.executeUpdate()
+
+                conn.close()
+                return@withContext true //SE REALIZO LA VERIFICACION
+            }
+
+            false //NO SE REALIZO LA VERIFICACION
+        }catch (e : Exception){
+            e.printStackTrace()
+            false //LA CONEXION FALLO
         }
 
     }
