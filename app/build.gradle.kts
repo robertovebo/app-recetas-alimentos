@@ -29,12 +29,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true //CAMBIO AQUI
+        sourceCompatibility = JavaVersion.VERSION_1_8 //CAMBIA LA VERSION DE JAVA PARA COMPATIBILIDAD CON MARIADB
+        targetCompatibility = JavaVersion.VERSION_1_8 //CAMBIA LA VERSION DE JAVA PARA COMPATIBILIDAD CON MARIADB
     }
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
@@ -53,4 +55,6 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation("org.mariadb.jdbc:mariadb-java-client:2.4.1") //LIBRERIA PARA EL CONECTOR DE MARIADB
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4") //LINEA QUE IMPLEMENTA FUNCIONES DE JAVA PARA EVITAR CRASHEOS
 }
