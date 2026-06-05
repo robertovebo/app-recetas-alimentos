@@ -37,6 +37,16 @@ android {
         compose = true
     }
 
+    //MODIFICACION 05-06-2026
+    //EVITA ERRORES DE DUPLICACION
+    packaging{
+        resources{
+            excludes += "/META-INF/NOTICE.md"
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+        }
+    }
+
 }
 
 dependencies {
