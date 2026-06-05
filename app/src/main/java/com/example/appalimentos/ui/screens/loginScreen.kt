@@ -42,7 +42,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.text.style.TextDecoration
 import kotlinx.coroutines.launch
 
-//CODIGO PENDIENTE POR COMENTAR (MAÑANA LO HAGO)
+//FUNCION DE LOGIN
 @Composable
 fun Login(
     onLoginSuccess: () -> Unit,
@@ -50,7 +50,7 @@ fun Login(
 ){
     val db = remember { MySqlConnection() } //VARIABLE QUE UNE LA CONEXION A LA BASE DE DATOS
     val scope = rememberCoroutineScope()    //CORRUTINA
-    val context = LocalContext.current      //CON
+    val context = LocalContext.current      //VARIABLE QUE PERMITE DESPLEGAR MENSAJES DE ANDROID
 
     var email by remember { mutableStateOf("") }
     var password by remember {mutableStateOf("")}
