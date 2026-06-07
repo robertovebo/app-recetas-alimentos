@@ -72,7 +72,8 @@ private fun NavItem(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onClick() }
+        modifier = Modifier
+            .clickable { onClick() }
     ) {
 
         Icon(

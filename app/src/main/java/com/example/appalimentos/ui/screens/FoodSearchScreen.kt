@@ -124,14 +124,16 @@ fun FoodSearchScreen( navController: NavController ) {
             Spacer(
                 modifier = Modifier.height(16.dp)
             )
-
-            navigationBar(
-                onRecetasClick = {},
-                onAlimentosClick = {},
-                onPerfilClick = { navController.navigate("profile") }
-            )
         }
 
+        navigationBar(
+            onRecetasClick = {},
+            onAlimentosClick = {},
+            onPerfilClick = { navController.navigate("profile") }
+        )
 
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.example.appalimentos.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +16,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appalimentos.viewmodel.FoodViewModel
 
 import androidx.navigation.NavController
+import com.example.appalimentos.components.DataProfileTextfield
+import com.example.appalimentos.components.NutritionCard
+import com.example.appalimentos.components.PrimaryButton
+import com.example.appalimentos.components.SearchBar
+import com.example.appalimentos.components.TittleName
+import com.example.appalimentos.components.navigationBar
+
 
 @Composable
 fun ProfileScreen( navController: NavController ) {
@@ -27,31 +35,82 @@ fun ProfileScreen( navController: NavController ) {
         viewModel.loadSavedFoods()
     }
 
-    LazyColumn {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
 
-        items(foods) { food ->
+        TittleName("Perfil")
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
 
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(all = 16.dp)
+        ) {
 
-                    Text(food.name)
+            DataProfileTextfield(
+                valueNombre = "Nombre", // Se usa mientras que no se puede obtener
+                valueCorreo = "Correo"  //  la inforamcion de la base de datos
+            )
 
-                    Text(
-                        "Categoría: ${food.category ?: "N/A"}"
-                    )
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
 
-                    Text(
-                        "Calorías: ${food.calories ?: "N/A"}"
-                    )
+            // muestra los alimentos guardados prueba
+            LazyColumn {
+
+                items(foods) { food ->
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+
+                            Text(food.name)
+
+                            Text(
+                                "Categoría: ${food.category ?: "N/A"}"
+                            )
+
+                            Text(
+                                "Calorías: ${food.calories ?: "N/A"}"
+                            )
+                        }
+                    }
                 }
             }
+
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
         }
+
+        PrimaryButton(
+            text = "Cerrar Sesion",
+            onClick = { }
+        )
+
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+        navigationBar(
+            onRecetasClick = {},
+            onAlimentosClick = { navController.navigate("foods") },
+            onPerfilClick = {}
+        )
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
     }
 }

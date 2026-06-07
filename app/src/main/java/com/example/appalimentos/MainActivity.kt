@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
             }
             //*****
 
-            ProfileScreen()// prueba para ver si funciona
+            //ProfileScreen()// prueba para ver si funciona
 
 
             /* // Parte de login ignacio
