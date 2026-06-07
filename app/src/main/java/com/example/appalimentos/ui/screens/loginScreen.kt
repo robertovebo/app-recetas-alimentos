@@ -2,6 +2,7 @@ package com.example.appalimentos.ui.screens
 
 import android.R
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Button
@@ -39,15 +42,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.text.style.TextDecoration
 import kotlinx.coroutines.launch
 
-//CODIGO PENDIENTE POR COMENTAR (MAÑANA LO HAGO)
+//FUNCION DE LOGIN
 @Composable
 fun Login(
     onLoginSuccess: () -> Unit,
     onNavigateToRegister: () -> Unit
 ){
-    val db = remember { MySqlConnection() }
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
+    val db = remember { MySqlConnection() } //VARIABLE QUE UNE LA CONEXION A LA BASE DE DATOS
+    val scope = rememberCoroutineScope()    //CORRUTINA
+    val context = LocalContext.current      //VARIABLE QUE PERMITE DESPLEGAR MENSAJES DE ANDROID
 
     var email by remember { mutableStateOf("") }
     var password by remember {mutableStateOf("")}
@@ -58,6 +61,8 @@ fun Login(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -72,9 +77,18 @@ fun Login(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //TITULO Y SUBTITULO
-        Text(text = "Bienvenido a NutriRecetas", fontSize = 28.sp, color = Color.Black)
-        Text(text = "Inicie sesion para comenzar", fontSize = 14.sp, color = Color.Gray)
+        //TITULO
+        Text(
+            text = "Bienvenido a NutriRecetas",
+            fontSize = 28.sp,
+            color = Color.Black
+        )
+        //SUBTITULO
+        Text(
+            text = "Inicie sesion para comenzar",
+            fontSize = 14.sp,
+            color = Color.Gray
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -114,24 +128,31 @@ fun Login(
 
         Spacer(modifier = Modifier.height(24.dp))
         //PENDIENTE DE COMENTAR (MAÑANA LO HAGO)
+        //SI LA VARIABLE IS LOADING ES VERDADERA SE MUESTRA UN INDICADOR DE CARGA
         if(isLoading){
             CircularProgressIndicator(color = customGreen)
         }
+        //SINO SE MUESTRA EL BOTON DE INICIO DE SESION
         else {
             Button(
                 onClick = {
+                    //SI EL CAMPO DE CORREO O CONTRASEÑA ESTAN VACIOS SALTA UN MENSAJE DE ALERTA
                     if (email.isBlank() || password.isBlank()) {
                         Toast.makeText(
                             context,
                             "Por favor llena todos los campos",
                             Toast.LENGTH_SHORT
                         ).show()
+
                         return@Button
                     }
+                    //SI TOD0 ES CORRECTO SE MOSTRARA EL INDICADOR DE CARGA DE DATOS
                     isLoading = true
+                    //CORRUTINA QUE VERIFICA EL ESTADO DE LOS DATOS ENVIADOS CON LA BASE DE DATOS
                     scope.launch {
-                        val success = db.login(email, password)
+                        val success = db.login(email, password) //VARIABLE QUE GUARDA EL ESTADO DE LOS DATOS ENVIADOS
                         isLoading = false
+                        //SI TOD0 ES CORRECTO NOS MANDA AL HOMESCREEN
                         if (success) {
                             onLoginSuccess()
                         } else {

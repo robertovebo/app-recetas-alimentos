@@ -37,6 +37,16 @@ android {
         compose = true
     }
 
+    //MODIFICACION 05-06-2026
+    //EVITA ERRORES DE DUPLICACION
+    packaging{
+        resources{
+            excludes += "/META-INF/NOTICE.md"
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+        }
+    }
+
 }
 
 dependencies {
@@ -55,6 +65,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation("com.sun.mail:jakarta.mail:2.0.1")//LIBRERIA PARA ENVIO DE CORREOS
+    implementation("org.mindrot:jbcrypt:0.4")//LIBRERIA PARA ENCRIPTAR CONTRASEÑAS
     implementation("org.mariadb.jdbc:mariadb-java-client:2.4.1") //LIBRERIA PARA EL CONECTOR DE MARIADB
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4") //LINEA QUE IMPLEMENTA FUNCIONES DE JAVA PARA EVITAR CRASHEOS
 }
