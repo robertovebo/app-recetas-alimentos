@@ -16,7 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.appalimentos.ui.theme.colorPrincipal
 
-
+// barra de busqueda
 @Composable
 fun SearchBar(
     value: String,

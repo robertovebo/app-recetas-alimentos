@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.sp
 import com.example.appalimentos.ui.theme.AppAlimentosTheme
 import com.example.appalimentos.ui.theme.colorPrincipal
 
+
+// BOTON PRINCIPAL
 @Composable
 fun PrimaryButton(
     text: String,

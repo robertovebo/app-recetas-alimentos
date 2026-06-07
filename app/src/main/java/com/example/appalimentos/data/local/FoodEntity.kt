@@ -1,6 +1,12 @@
-package com.example.appalimentos.data.model
+package com.example.appalimentos.data.local
 
-data class NutritionInfo(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "foods")
+data class FoodEntity(
+
+    @PrimaryKey
     val fdcId: Int,
     val name: String,
     val dataType: String?,

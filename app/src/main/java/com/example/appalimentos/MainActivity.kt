@@ -24,7 +24,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.appalimentos.ui.screens.FoodScreen
+import com.example.appalimentos.ui.screens.FoodSearchScreen
 import com.example.appalimentos.ui.screens.Login
+import com.example.appalimentos.ui.screens.ProfileScreen
+
+import androidx.navigation.compose.NavHost //**************  Navigation
+import androidx.navigation.compose.composable  //
+import androidx.navigation.compose.rememberNavController  //
+import com.example.appalimentos.ui.navigation.Routes //***********
 
 //CLASE MAIN PARA COMPROBAR QUE FUNCIONE
 //CODIGO PENDIENTE DE COMENTAR
@@ -33,6 +41,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            //******* Navigation para probar una vez dentro de la app
+            val navController = rememberNavController()
+
+            NavHost(
+                navController = navController,
+                startDestination = Routes.FOODS
+            ) {
+
+                composable(Routes.FOODS) {
+                    FoodSearchScreen(navController)
+                }
+
+                composable(Routes.PROFILE) {
+                    ProfileScreen(navController)
+                }
+            }
+            //*****
+
+            ProfileScreen()// prueba para ver si funciona
+
+
+            /* // Parte de login ignacio
             var currentAuthScreen by remember { mutableStateOf("login") }
             var userLoggedIn by remember {mutableStateOf(false)}
 
@@ -50,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
-            }
+            }*/
         }
     }
     //HOMESCREEN PROVISIONAL -

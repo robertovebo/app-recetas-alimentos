@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
+    //alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp) //ksp para room
 }
 
 android {
@@ -55,6 +57,13 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation("androidx.navigation:navigation-compose:2.8.0")// navegacion
+    implementation("androidx.room:room-runtime:2.7.2")// Room
+    implementation("androidx.room:room-ktx:2.7.2")///
+    ksp("androidx.room:room-compiler:2.7.2")//**********
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1") // Dependencias
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.1") //   Para ViewModel
     implementation("com.squareup.retrofit2:retrofit:2.11.0") //*************
     implementation("com.squareup.retrofit2:converter-gson:2.11.0") //  Dependencias para usar retrofit (API)
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0") //*********
