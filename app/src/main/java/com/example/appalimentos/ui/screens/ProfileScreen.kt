@@ -17,6 +17,8 @@ import com.example.appalimentos.viewmodel.FoodViewModel
 
 import androidx.navigation.NavController
 import com.example.appalimentos.components.DataProfileTextfield
+import com.example.appalimentos.components.FavoriteFoodCard
+import com.example.appalimentos.components.FavoriteRecipeCard
 import com.example.appalimentos.components.NutritionCard
 import com.example.appalimentos.components.PrimaryButton
 import com.example.appalimentos.components.SearchBar
@@ -31,8 +33,11 @@ fun ProfileScreen( navController: NavController ) {
 
     val foods by viewModel.savedFoods
 
+    val recipes by viewModel.savedRecipes
+
     LaunchedEffect(Unit) {
         viewModel.loadSavedFoods()
+        viewModel.loadSavedRecipes()
     }
 
     Column(
@@ -61,38 +66,53 @@ fun ProfileScreen( navController: NavController ) {
                 modifier = Modifier.height(16.dp)
             )
 
-            // muestra los alimentos guardados prueba
-            LazyColumn {
+            if (foods.isEmpty()) {
 
-                items(foods) { food ->
+                Text(
+                    text = "No tienes alimentos favoritos"
+                )
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
+            } else {
+                LazyColumn(
+                    modifier = Modifier.weight(1f)
+                ) {
 
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
+                    item {
+                        Text("Alimentos Favoritos")
 
-                            Text(food.name)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
 
-                            Text(
-                                "Categoría: ${food.category ?: "N/A"}"
-                            )
+                    items(foods) { food ->
 
-                            Text(
-                                "Calorías: ${food.calories ?: "N/A"}"
-                            )
-                        }
+                        FavoriteFoodCard(
+                            food = food,
+                            onDeleteClick = {
+                                viewModel.deleteFood(food.fdcId)
+                            }
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        Text("Recetas Favoritas")
+
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+
+                    //recipes Falta de modificar para llamar carta de recetas fav
+                    items(recipes) { recipe ->
+
+                        FavoriteRecipeCard(
+                            recipe = recipe,
+                            onDeleteClick = {
+                                viewModel.deleteRecipe(recipe.fdcId)
+                            }
+                        )
                     }
                 }
             }
-
-            Spacer(
-                modifier = Modifier.height(16.dp)
-            )
         }
 
         PrimaryButton(
@@ -105,7 +125,7 @@ fun ProfileScreen( navController: NavController ) {
         )
 
         navigationBar(
-            onRecetasClick = {},
+            onRecetasClick = { navController.navigate("recipes") },
             onAlimentosClick = { navController.navigate("foods") },
             onPerfilClick = {}
         )

@@ -15,7 +15,7 @@ class FoodLocalRepository(
         return dao.getAllFoods()
     }
 
-    suspend fun deleteFood(id: Int) {
-        dao.deleteFood(id)
+    suspend fun deleteFood(foodId: Int) {
+        dao.deleteFood(foodId)
     }
 }

@@ -21,7 +21,7 @@ fun FoodScreen() {
 
     food?.let {
 
-        NutritionCard(info = it,  onSaveClick = {} )
+        NutritionCard(info = it, name="prueba",  onSaveClick = {} )
 
     }
 

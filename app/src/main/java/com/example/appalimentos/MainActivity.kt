@@ -31,6 +31,7 @@ import androidx.navigation.compose.NavHost //**************  Navigation
 import androidx.navigation.compose.composable  //
 import androidx.navigation.compose.rememberNavController  //
 import com.example.appalimentos.ui.navigation.Routes //***********
+import com.example.appalimentos.ui.screens.RecipeSearchScreen
 import com.example.appalimentos.ui.screens.Register
 import com.example.appalimentos.ui.screens.verification
 
@@ -56,6 +57,10 @@ class MainActivity : ComponentActivity() {
 
                 composable(Routes.PROFILE) {
                     ProfileScreen(navController)
+                }
+
+                composable(Routes.RECIPES) {
+                    RecipeSearchScreen(navController)
                 }
             }
             //*****

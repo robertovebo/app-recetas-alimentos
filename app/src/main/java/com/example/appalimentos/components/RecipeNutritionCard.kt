@@ -14,7 +14,7 @@ import com.example.appalimentos.data.model.NutritionInfo
 
 // Elemento visual de la app
 @Composable
-fun NutritionCard(
+fun RecipeNutritionCard(
     name: String,
     info: NutritionInfo,
     onSaveClick: () -> Unit,
@@ -48,10 +48,6 @@ fun NutritionCard(
             )
 
             Text(
-                text = "Marca: ${info.brand ?: "N/A"}"
-            )
-
-            Text(
                 text = "Calorías: ${info.calories ?: "N/A"} kcal"
             )
 
@@ -70,6 +66,17 @@ fun NutritionCard(
             Text(
                 text = "Azúcares: ${info.sugars ?: "N/A"} g"
             )
+
+            if (!info.additionalDescription.isNullOrBlank()) {
+
+                Text(
+                    text = "Descripción adicional:"
+                )
+
+                Text(
+                    text = info.additionalDescription
+                )
+            }
 
             PrimaryButton(
                 text = name,
