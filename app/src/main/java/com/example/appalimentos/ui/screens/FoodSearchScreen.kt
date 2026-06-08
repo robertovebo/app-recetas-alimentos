@@ -126,7 +126,7 @@ fun FoodSearchScreen(navController: NavController, userEmail: String) {
                     // info = it // version anterior
                     name = "Guardar alimento",
                     info = it, // Prueba de guardado
-                    onSaveClick = { foodViewModel.saveCurrentFood() }  // llama a la funcion de guardado   // *****
+                    onSaveClick = { foodViewModel.saveCurrentFood(userEmail) }  // llama a la funcion de guardado   // *****
                 )
             }
 
