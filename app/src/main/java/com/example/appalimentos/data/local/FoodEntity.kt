@@ -1,13 +1,11 @@
 package com.example.appalimentos.data.local
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "foods")
+@Entity(tableName = "foods", primaryKeys = ["fdcId", "userEmail"])
 data class FoodEntity(
-
-    @PrimaryKey
     val fdcId: Int,
+    val userEmail: String,
     val name: String,
     val dataType: String?,
     val category: String?,
