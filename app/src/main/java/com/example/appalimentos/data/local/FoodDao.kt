@@ -11,9 +11,11 @@ interface FoodDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFood(food: FoodEntity)
 
-    @Query("SELECT * FROM foods")
-    suspend fun getAllFoods(): List<FoodEntity>
+    //SE ACTUALIZA LA SENTENCIA PARA VALIDAR EL CORREO DEL USUARIO
+    @Query("SELECT * FROM foods WHERE userEmail = :userEmail")
+    suspend fun getFoodsByUser(userEmail: String): List<FoodEntity>
 
-    @Query("DELETE FROM foods WHERE fdcId = :foodId")
-    suspend fun deleteFood(foodId: Int)
+    //SE ACTUALIZA LA SENTENCIA PARA VALIDAR EL CORREO DEL USUARIO
+    @Query("DELETE FROM foods WHERE fdcId = :foodId AND userEmail = :userEmail")
+    suspend fun deleteFood(foodId: Int, userEmail: String)
 }
