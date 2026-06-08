@@ -119,7 +119,7 @@ fun RecipeSearchScreen(navController: NavController, userEmail: String) {
                     // info = it // version anterior
                     name = "Guardar receta",
                     info = it, // Prueba de guardado
-                    onSaveClick = { foodViewModel.saveCurrentRecipe() }  // llama a la funcion de guardado   // *****
+                    onSaveClick = { foodViewModel.saveCurrentRecipe(userEmail) }  // llama a la funcion de guardado   // *****
                 )
             }
 
