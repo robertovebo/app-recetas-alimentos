@@ -44,10 +44,10 @@ class MySqlConnection{
 
     //ULTIMOS CAMBIOS 05-06-2026
     //FUNCION DE REGISTRO QUE SE EJECUTA INTERNAMENTE
-    suspend fun register(email:String, passwordRaw : String) : Boolean = withContext(Dispatchers.IO)
+    suspend fun register(email:String, passwordRaw : String, username: String) : Boolean = withContext(Dispatchers.IO)
     {
         val conn = connect() ?: return@withContext false //VARIABLE QUE GUARDA LA CONEXION A LA BASE DE DATOS
-        val query = "INSERT INTO _user(passwrd, email, is_verified, verification_code) VALUES (?,?,?,?)" //QUERY PARA LA BASE DE DATOS
+        val query = "INSERT INTO _user(user_name, passwrd, email, is_verified, verification_code) VALUES (?,?,?,?,?)" //QUERY PARA LA BASE DE DATOS
 
         //TRY CATCH PARA LA LLAMADA A LA BASE DE DATOS
         try {
@@ -56,10 +56,11 @@ class MySqlConnection{
             val passwordHashed = BCrypt.hashpw(passwordRaw, BCrypt.gensalt()) //VARIABLE DONDE SE ENCRIPTA LA CONTRASEÑA
 
             val stm = conn.prepareStatement(query)
-            stm.setString(1, passwordHashed)
-            stm.setString(2, email)
-            stm.setInt(3,0)
-            stm.setString(4,verificationCode)
+            stm.setString(1, username)
+            stm.setString(2, passwordHashed)
+            stm.setString(3,email)
+            stm.setInt(4,0)
+            stm.setString(5,verificationCode)
 
             val rowInserted = stm.executeUpdate()
             conn.close()
@@ -187,6 +188,33 @@ class MySqlConnection{
         }
     }
 
+    suspend fun getUserProfile(email:String): UserData? = withContext(Dispatchers.IO)
+    {
+        val conn = connect() ?: return@withContext null
+        val query = "SELECT user_name, email FROM _user WHERE email = ?"
+
+        try{
+
+            val stm = conn.prepareStatement(query)
+            stm.setString(1, email)
+            val resultSet = stm.executeQuery()
+
+            if(resultSet.next()){
+                val user = UserData(
+                    name = resultSet.getString("user_name"),
+                    email = resultSet.getString("email")
+                )
+                conn.close()
+                return@withContext user
+            }
+            conn.close()
+            null
+        }catch (e: Exception){
+            e.printStackTrace()
+            null
+        }
+
+    }
 
 }
 
