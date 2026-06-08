@@ -1,8 +1,6 @@
 package com.example.appalimentos.ui.screens
 
-import android.R
-import android.widget.Button
-import android.widget.Space
+
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -59,6 +56,7 @@ fun Register(
     val scope = rememberCoroutineScope()   //CORRUTINA
     val context = LocalContext.current     //VARIABLE QUE PERMITE DESPLEGAR MENSAJES DE ANDROID
 
+    var name by remember {mutableStateOf("")}
     var email by remember {mutableStateOf("")} //CAMPO DE EMAIL
     var password by remember {mutableStateOf("")} //CAMPO DE CONTRASEÑA
     var confirmPass by remember {mutableStateOf("")} //CAMPO DE CONFIRMACION DE CONTRASEÑA
@@ -102,6 +100,26 @@ fun Register(
         //SECCION DE CORREO
         Column(modifier = Modifier.fillMaxSize())
         {
+
+            Text(
+                text = "Nombre completo",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+
+            //CAMPO
+            OutlinedTextField(
+                value = name,
+                onValueChange = {name = it},
+                placeholder = {Text("Ingrese su nombre aqui", color = Color.LightGray)},
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = customGreen,
+                    unfocusedBorderColor = customWhite)
+            )
+
             Text(
                 text = "Correo",
                 fontSize = 14.sp,
@@ -208,7 +226,7 @@ fun Register(
 
                     //CORRUTINA QUE SE ENCARGA DE VERIFICAR LOS DATOS EN LA BASE DE DATOS
                     scope.launch{
-                        val success = db.register(email.trim(), password) //VARIABLE QUE INTENTA HACER LA FUNCION DE REGISTRO
+                        val success = db.register(email.trim(), password, name) //VARIABLE QUE INTENTA HACER LA FUNCION DE REGISTRO
                         isLoading = false
 
                         //SI HAY EXITO EL USUARIO ES REGISTRADO

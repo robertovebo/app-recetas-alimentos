@@ -12,8 +12,6 @@ import com.example.appalimentos.components.SearchBar
 import com.example.appalimentos.components.navigationBar
 
 import androidx.compose.material3.Text
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appalimentos.components.TittleName
 import com.example.appalimentos.viewmodel.FoodSearchViewModel
@@ -24,9 +22,10 @@ import androidx.compose.material3.Card
 import com.example.appalimentos.components.NutritionCard
 
 import androidx.navigation.NavController // Navigation
+import com.example.appalimentos.ui.navigation.Routes
 
 @Composable
-fun FoodSearchScreen( navController: NavController ) {
+fun FoodSearchScreen( navController: NavController, userEmail :String) {
 
     var searchText by remember {
         mutableStateOf("")
@@ -138,7 +137,7 @@ fun FoodSearchScreen( navController: NavController ) {
         navigationBar(
             onRecetasClick = { navController.navigate("recipes") },
             onAlimentosClick = {},
-            onPerfilClick = { navController.navigate("profile") }
+            onPerfilClick = { navController.navigate(Routes.createProfileRoute(userEmail)) }
         )
 
         Spacer(
