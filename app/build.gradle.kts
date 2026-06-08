@@ -82,3 +82,5 @@ dependencies {
     implementation("org.mariadb.jdbc:mariadb-java-client:2.4.1") //LIBRERIA PARA EL CONECTOR DE MARIADB
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4") //LINEA QUE IMPLEMENTA FUNCIONES DE JAVA PARA EVITAR CRASHEOS
 }
+
+
