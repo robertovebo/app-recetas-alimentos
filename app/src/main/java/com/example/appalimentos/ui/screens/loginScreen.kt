@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 //FUNCION DE LOGIN
 @Composable
 fun Login(
-    onLoginSuccess: () -> Unit,
+    onLoginSuccess: (userEmail : String) -> Unit,
     onNavigateToRegister: () -> Unit
 ){
     val db = remember { MySqlConnection() } //VARIABLE QUE UNE LA CONEXION A LA BASE DE DATOS
@@ -154,7 +154,7 @@ fun Login(
                         isLoading = false
                         //SI TOD0 ES CORRECTO NOS MANDA AL HOMESCREEN
                         if (success) {
-                            onLoginSuccess()
+                            onLoginSuccess(email)
                         } else {
                             Toast.makeText(
                                 context,
