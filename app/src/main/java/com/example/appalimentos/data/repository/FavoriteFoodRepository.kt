@@ -11,11 +11,11 @@ class FavoriteFoodRepository(
         foodDao.insertFood(food)
     }
 
-    suspend fun getFoods(): List<FoodEntity> {
-        return foodDao.getAllFoods()
+    suspend fun getFoods(userEmail: String): List<FoodEntity> {
+        return foodDao.getFoodsByUser(userEmail)
     }
 
-    suspend fun deleteFood(foodId: Int) {
-        foodDao.deleteFood(foodId)
+    suspend fun deleteFood(foodId: Int, userEmail: String) {
+        foodDao.deleteFood(foodId, userEmail)
     }
 }
