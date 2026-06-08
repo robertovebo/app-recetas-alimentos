@@ -32,12 +32,10 @@ import com.example.appalimentos.ui.navigation.Routes.createRecipesRoute
 
 @Composable
 fun ProfileScreen(
-    navController: NavController ,
+    navController: NavController,
     userEmail: String,
-    onLogOut:() -> Unit
-)
-
-{
+    onLogOut: () -> Unit
+) {
 
     val viewModel: FoodViewModel = viewModel()
 
@@ -45,15 +43,15 @@ fun ProfileScreen(
 
     val db = remember { MySqlConnection() } //CONEXION A BASE DE DATOS
     val foods by viewModel.savedFoods
-    var userData by remember {mutableStateOf<UserData?>(null)} //DATOS DEL USUARIO
+    var userData by remember { mutableStateOf<UserData?>(null) } //DATOS DEL USUARIO
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(userEmail) {
         val profile = db.getUserProfile(userEmail) //VARIABLE QUE GUARDA EL USUARIO
         userData = profile //SE PASAN LOS VALORES A LA VARIABLE LOCAL
         isLoading = false
-        viewModel.loadSavedFoods()
-        viewModel.loadSavedRecipes()
+        viewModel.loadSavedFoods(userEmail)
+        viewModel.loadSavedRecipes(userEmail)
     }
 
     Column(
@@ -72,22 +70,20 @@ fun ProfileScreen(
                 .weight(1f)
                 .padding(all = 16.dp)
         ) {
-            //CAMBIOS AQUI
             //SI ESTA CARGANDO MUESTRA LA BARRA DE PROGRESO
-            if(isLoading){
+            if (isLoading) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     CircularProgressIndicator(color = Color(0xFF387068))
                 }
-            }
-            else{
+            } else {
 
-                userData?.let {user ->
+                userData?.let { user ->
                     DataProfileTextfield(
                         valueNombre = user.name,
-                        valueCorreo =  user.email
+                        valueCorreo = user.email
                     )
                 } ?: run { //POR SI EL USUARIO NO ES ENCONTRADO
                     DataProfileTextfield(
@@ -101,10 +97,10 @@ fun ProfileScreen(
                 modifier = Modifier.height(16.dp)
             )
 
-            if (foods.isEmpty()) {
+            if (foods.isEmpty() && recipes.isEmpty()) {
 
                 Text(
-                    text = "No tienes alimentos favoritos"
+                    text = "No tienes favoritos guardados"
                 )
 
             } else {
@@ -112,39 +108,37 @@ fun ProfileScreen(
                     modifier = Modifier.weight(1f)
                 ) {
 
-                    item {
-                        Text("Alimentos Favoritos")
+                    if (foods.isNotEmpty()) {
+                        item {
+                            Text("Alimentos Favoritos")
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        items(foods) { food ->
+                            FavoriteFoodCard(
+                                food = food,
+                                onDeleteClick = {
+                                    viewModel.deleteFood(food.fdcId, userEmail)
+                                }
+                            )
+                        }
                     }
 
-                    items(foods) { food ->
+                    if (recipes.isNotEmpty()) {
+                        item {
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Text("Recetas Favoritas")
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
 
-                        FavoriteFoodCard(
-                            food = food,
-                            onDeleteClick = {
-                                viewModel.deleteFood(food.fdcId)
-                            }
-                        )
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        Text("Recetas Favoritas")
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-
-                    //recipes Falta de modificar para llamar carta de recetas fav
-                    items(recipes) { recipe ->
-
-                        FavoriteRecipeCard(
-                            recipe = recipe,
-                            onDeleteClick = {
-                                viewModel.deleteRecipe(recipe.fdcId)
-                            }
-                        )
+                        items(recipes) { recipe ->
+                            FavoriteRecipeCard(
+                                recipe = recipe,
+                                onDeleteClick = {
+                                    viewModel.deleteRecipe(recipe.fdcId, userEmail)
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -152,7 +146,7 @@ fun ProfileScreen(
 
         PrimaryButton(
             text = "Cerrar Sesion",
-            onClick = {onLogOut()}
+            onClick = { onLogOut() }
         )
 
         Spacer(
@@ -160,7 +154,7 @@ fun ProfileScreen(
         )
 
         navigationBar(
-            onRecetasClick = { navController.navigate(createRecipesRoute(userEmail)) } ,
+            onRecetasClick = { navController.navigate(createRecipesRoute(userEmail)) },
             onAlimentosClick = { navController.navigate(createFoodsRoute(userEmail)) },
             onPerfilClick = {}
         )
