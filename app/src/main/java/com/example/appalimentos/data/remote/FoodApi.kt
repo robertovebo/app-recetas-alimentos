@@ -10,6 +10,7 @@ import com.example.appalimentos.data.model.SearchRequest
 import retrofit2.http.Body
 import retrofit2.http.POST
 
+// interfaz de retrofit
 interface FoodApi {
 
     // buscar por id

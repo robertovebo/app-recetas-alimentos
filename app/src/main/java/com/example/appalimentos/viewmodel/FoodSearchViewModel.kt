@@ -15,13 +15,19 @@ class FoodSearchViewModel : ViewModel() {
     var searchResults = mutableStateListOf<FoodSearchItem>()
         private set
 
-    fun searchFoods(query: String) {
+    fun searchFoods(
+        query: String,
+        allowedTypes: List<String>
+    ) {
 
         viewModelScope.launch {
 
             try {
 
-                val foods = repository.searchFoods(query)
+                val foods = repository.searchFoods(
+                    query,
+                    allowedTypes
+                )
 
                 searchResults.clear()
                 searchResults.addAll(foods)

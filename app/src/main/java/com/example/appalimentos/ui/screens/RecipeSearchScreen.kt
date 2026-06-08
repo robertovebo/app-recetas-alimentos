@@ -12,6 +12,8 @@ import com.example.appalimentos.components.SearchBar
 import com.example.appalimentos.components.navigationBar
 
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appalimentos.components.TittleName
 import com.example.appalimentos.viewmodel.FoodSearchViewModel
@@ -22,10 +24,10 @@ import androidx.compose.material3.Card
 import com.example.appalimentos.components.NutritionCard
 
 import androidx.navigation.NavController // Navigation
-import com.example.appalimentos.ui.navigation.Routes
+import com.example.appalimentos.components.RecipeNutritionCard
 
 @Composable
-fun FoodSearchScreen( navController: NavController, userEmail :String) {
+fun RecipeSearchScreen( navController: NavController ) {
 
     var searchText by remember {
         mutableStateOf("")
@@ -35,8 +37,6 @@ fun FoodSearchScreen( navController: NavController, userEmail :String) {
 
     val results = viewModel.searchResults
 
-
-    val searchViewModel: FoodSearchViewModel = viewModel()
     val foodViewModel: FoodViewModel = viewModel()
     val selectedFood = foodViewModel.food.value
 
@@ -46,7 +46,7 @@ fun FoodSearchScreen( navController: NavController, userEmail :String) {
             .fillMaxSize()
     ) {
 
-        TittleName("Alimentos")
+        TittleName("Recetas")
 
         Spacer(
             modifier = Modifier.height(16.dp)
@@ -62,7 +62,7 @@ fun FoodSearchScreen( navController: NavController, userEmail :String) {
                 onValueChange = {
                     searchText = it
                 },
-                placeholder = "Buscar alimento"
+                placeholder = "Buscar receta"
             )
 
             Spacer(
@@ -70,7 +70,7 @@ fun FoodSearchScreen( navController: NavController, userEmail :String) {
             )
 
             PrimaryButton(
-                text = "Buscar alimento",
+                text = "Buscar receta",
                 onClick = {
 
                     if (searchText.isNotBlank()) {
@@ -78,13 +78,8 @@ fun FoodSearchScreen( navController: NavController, userEmail :String) {
                         // filtro de busqueda de alimento
                         viewModel.searchFoods(
                             searchText,
-                            listOf(
-                                "Foundation",
-                                "SR Legacy",
-                                "Branded"
-                            )
+                            listOf("Survey (FNDDS)")
                         )
-
                     }
                 }
             )
@@ -121,11 +116,11 @@ fun FoodSearchScreen( navController: NavController, userEmail :String) {
                 )
 
                 // muestra el alimento seleccionado
-                NutritionCard(
+                RecipeNutritionCard(
                     // info = it // version anterior
-                    name = "Guardar alimento",
+                    name = "Guardar receta",
                     info = it, // Prueba de guardado
-                    onSaveClick = { foodViewModel.saveCurrentFood() }  // llama a la funcion de guardado   // *****
+                    onSaveClick = { foodViewModel.saveCurrentRecipe() }  // llama a la funcion de guardado   // *****
                 )
             }
 
@@ -135,9 +130,9 @@ fun FoodSearchScreen( navController: NavController, userEmail :String) {
         }
 
         navigationBar(
-            onRecetasClick = { navController.navigate("recipes") },
-            onAlimentosClick = {},
-            onPerfilClick = { navController.navigate(Routes.createProfileRoute(userEmail)) }
+            onRecetasClick = {},
+            onAlimentosClick = {navController.navigate("foods")},
+            onPerfilClick = { navController.navigate("profile") }
         )
 
         Spacer(

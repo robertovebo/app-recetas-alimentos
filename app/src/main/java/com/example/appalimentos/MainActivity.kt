@@ -27,6 +27,7 @@ import androidx.navigation.compose.composable  //
 import androidx.navigation.compose.rememberNavController  //
 import androidx.navigation.navArgument
 import com.example.appalimentos.ui.navigation.Routes //***********
+import com.example.appalimentos.ui.screens.RecipeSearchScreen
 import com.example.appalimentos.ui.screens.Register
 import com.example.appalimentos.ui.screens.Splash
 import com.example.appalimentos.ui.screens.Welcome
@@ -110,6 +111,10 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         userEmail = userEmail
                     )
+                }
+
+                composable(Routes.RECIPES) {
+                    RecipeSearchScreen(navController)
                 }
             }
             //*****

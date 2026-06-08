@@ -17,7 +17,9 @@ object FoodDatabaseProvider {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "foods_database"
-            ).build()
+            )
+            .fallbackToDestructiveMigration()
+            .build()
 
             INSTANCE = instance
             instance
