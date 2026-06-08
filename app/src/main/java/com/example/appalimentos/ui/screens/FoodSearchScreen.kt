@@ -24,9 +24,10 @@ import androidx.compose.material3.Card
 import com.example.appalimentos.components.NutritionCard
 
 import androidx.navigation.NavController // Navigation
+import com.example.appalimentos.ui.navigation.Routes
 
 @Composable
-fun FoodSearchScreen( navController: NavController ) {
+fun FoodSearchScreen( navController: NavController, userEmail :String) {
 
     var searchText by remember {
         mutableStateOf("")
@@ -129,7 +130,7 @@ fun FoodSearchScreen( navController: NavController ) {
         navigationBar(
             onRecetasClick = {},
             onAlimentosClick = {},
-            onPerfilClick = { navController.navigate("profile") }
+            onPerfilClick = { navController.navigate(Routes.createProfileRoute(userEmail)) }
         )
 
         Spacer(
