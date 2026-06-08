@@ -6,5 +6,6 @@ data class FoodSearchResponse(
 
 data class FoodSearchItem(
     val fdcId: Int,
-    val description: String
+    val description: String,
+    val dataType: String?
 )

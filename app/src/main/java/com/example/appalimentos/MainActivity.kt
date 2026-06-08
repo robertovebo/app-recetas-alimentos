@@ -33,6 +33,7 @@ import androidx.navigation.compose.NavHost //**************  Navigation
 import androidx.navigation.compose.composable  //
 import androidx.navigation.compose.rememberNavController  //
 import com.example.appalimentos.ui.navigation.Routes //***********
+import com.example.appalimentos.ui.screens.RecipeSearchScreen
 
 //CLASE MAIN PARA COMPROBAR QUE FUNCIONE
 //CODIGO PENDIENTE DE COMENTAR
@@ -56,6 +57,10 @@ class MainActivity : ComponentActivity() {
 
                 composable(Routes.PROFILE) {
                     ProfileScreen(navController)
+                }
+
+                composable(Routes.RECIPES) {
+                    RecipeSearchScreen(navController)
                 }
             }
             //*****

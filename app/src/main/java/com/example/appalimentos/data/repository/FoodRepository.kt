@@ -16,6 +16,17 @@ class FoodRepository {
             id,
             ApiConstants.API_KEY
         )
+
+        //Informacion adicional para recetas
+        val additionalDescription =
+            response.foodAttributes
+                ?.filter {
+                    it.foodAttributeType?.name == "Additional Description"
+                }
+                ?.joinToString(", ") {
+                    it.value ?: ""
+                }
+
         fun findValue(name: String): Double? {
             return response.foodNutrients?.find {
                 it.nutrient?.name?.contains(name, ignoreCase = true) == true
@@ -28,16 +39,20 @@ class FoodRepository {
             dataType = response.dataType,
             category =
                 response.brandedFoodCategory
-                    ?: response.foodCategory?.description,
+                    ?: response.foodCategory?.description
+                    ?: response.wweiaFoodCategory?.wweiaFoodCategoryDescription,
             brand = response.brandOwner,
             calories = findValue("Energy"),
             protein = findValue("Protein"),
             fat = findValue("Total lipid"),
             carbs = findValue("Carbohydrate"),
-            sugars = findValue("Total Sugars")
+            sugars = findValue("Total Sugars"),
+            additionalDescription = additionalDescription
         )
     }
 
+    //busqueda antigua
+    /*
     suspend fun searchFoods(query: String): List<FoodSearchItem> {
 
         val response = RetrofitClient.api.searchFoods(
@@ -46,5 +61,23 @@ class FoodRepository {
         )
 
         return response.foods
+    }
+    */
+    // busqueda con filtro
+    suspend fun searchFoods(
+        query: String,
+        allowedTypes: List<String>
+    ): List<FoodSearchItem> {
+
+        val response = RetrofitClient.api.searchFoods(
+            ApiConstants.API_KEY,
+            SearchRequest(query)
+        )
+
+        return response.foods.filter { food ->
+
+            food.dataType in allowedTypes
+
+        }
     }
 }

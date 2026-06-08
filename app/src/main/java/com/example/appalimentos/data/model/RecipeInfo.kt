@@ -9,5 +9,5 @@ data class RecipeInfo(
     val protein: Double?,
     val fat: Double?,
     val carbs: Double?,
-    val sugar: Double?
+    val sugars: Double?
 )

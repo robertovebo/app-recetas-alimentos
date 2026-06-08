@@ -13,7 +13,9 @@ import androidx.lifecycle.AndroidViewModel
 
 import com.example.appalimentos.data.local.FoodDatabaseProvider
 import com.example.appalimentos.data.local.FoodEntity
+import com.example.appalimentos.data.local.RecipeEntity
 import com.example.appalimentos.data.repository.FoodLocalRepository //*******
+import com.example.appalimentos.data.repository.RecipeLocalRepository
 
 class FoodViewModel(
     application: Application
@@ -21,7 +23,7 @@ class FoodViewModel(
 
     private val repository = FoodRepository()
 
-    // Room
+    // bdd alimentos
     private val localRepository =
         FoodLocalRepository(
             FoodDatabaseProvider
@@ -29,15 +31,28 @@ class FoodViewModel(
                 .foodDao()
         )
 
+    //bdd recetas
+    private val recipeRepository =
+        RecipeLocalRepository(
+            FoodDatabaseProvider
+                .getDatabase(application)
+                .recipeDao()
+        )
+
     var food = mutableStateOf<NutritionInfo?>(null)
         private set
 
+    //alimentos
     var savedFoods = mutableStateOf<List<FoodEntity>>(emptyList())
+        private set
+
+    //recetas
+    var savedRecipes =
+        mutableStateOf<List<RecipeEntity>>(emptyList())
         private set
 
     // Carga de alimentos desde la API
     fun loadFood(id: Int) {
-
         viewModelScope.launch {
 
             food.value = repository.getNutrition(
@@ -50,11 +65,9 @@ class FoodViewModel(
 
     // Guarda alimentos en la Room
     fun saveCurrentFood() {
-
         val currentFood = food.value ?: return
 
         viewModelScope.launch {
-
             localRepository.saveFood(
 
                 FoodEntity(
@@ -76,12 +89,56 @@ class FoodViewModel(
 
     // Carga los alimentos guardados en la Room
     fun loadSavedFoods() {
-
         viewModelScope.launch {
-
             savedFoods.value =
                 localRepository.getFoods()
 
+        }
+    }
+
+    fun deleteFood(foodId: Int) {
+        viewModelScope.launch {
+            localRepository.deleteFood(foodId)
+
+            loadSavedFoods()
+        }
+    }
+
+    fun saveCurrentRecipe() {
+        val currentRecipe = food.value ?: return
+
+        viewModelScope.launch {
+
+            recipeRepository.saveRecipe(
+
+                RecipeEntity(
+                    fdcId = currentRecipe.fdcId,
+                    name = currentRecipe.name,
+                    dataType = currentRecipe.dataType,
+                    category = currentRecipe.category,
+                    calories = currentRecipe.calories,
+                    protein = currentRecipe.protein,
+                    fat = currentRecipe.fat,
+                    carbs = currentRecipe.carbs,
+                    sugars = currentRecipe.sugars,
+                    additionalDescription =
+                        currentRecipe.additionalDescription
+                )
+            )
+        }
+    }
+
+    fun loadSavedRecipes() {
+        viewModelScope.launch {
+            savedRecipes.value =
+                recipeRepository.getRecipes()
+        }
+    }
+
+    fun deleteRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            recipeRepository.deleteRecipe(recipeId)
+            loadSavedRecipes()
         }
     }
 }
