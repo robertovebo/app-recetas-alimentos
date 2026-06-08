@@ -8,13 +8,13 @@ import com.example.appalimentos.data.remote.ApiConstants
 import com.example.appalimentos.data.repository.FoodRepository
 import kotlinx.coroutines.launch
 
-import android.app.Application //***********   Para dar acceso a la room
+import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 
 import com.example.appalimentos.data.local.FoodDatabaseProvider
 import com.example.appalimentos.data.local.FoodEntity
 import com.example.appalimentos.data.local.RecipeEntity
-import com.example.appalimentos.data.repository.FoodLocalRepository //*******
+import com.example.appalimentos.data.repository.FoodLocalRepository
 import com.example.appalimentos.data.repository.RecipeLocalRepository
 
 class FoodViewModel(
@@ -23,7 +23,6 @@ class FoodViewModel(
 
     private val repository = FoodRepository()
 
-    // bdd alimentos
     private val localRepository =
         FoodLocalRepository(
             FoodDatabaseProvider
@@ -31,7 +30,6 @@ class FoodViewModel(
                 .foodDao()
         )
 
-    //bdd recetas
     private val recipeRepository =
         RecipeLocalRepository(
             FoodDatabaseProvider
@@ -42,36 +40,30 @@ class FoodViewModel(
     var food = mutableStateOf<NutritionInfo?>(null)
         private set
 
-    //alimentos
     var savedFoods = mutableStateOf<List<FoodEntity>>(emptyList())
         private set
 
-    //recetas
     var savedRecipes =
         mutableStateOf<List<RecipeEntity>>(emptyList())
         private set
 
-    // Carga de alimentos desde la API
     fun loadFood(id: Int) {
         viewModelScope.launch {
-
             food.value = repository.getNutrition(
                 id,
                 ApiConstants.API_KEY
             )
-
         }
     }
 
-    // Guarda alimentos en la Room
-    fun saveCurrentFood() {
+    fun saveCurrentFood(userEmail: String) {
         val currentFood = food.value ?: return
 
         viewModelScope.launch {
             localRepository.saveFood(
-
                 FoodEntity(
                     fdcId = currentFood.fdcId,
+                    userEmail = userEmail,
                     name = currentFood.name,
                     dataType = currentFood.dataType,
                     category = currentFood.category,
@@ -82,37 +74,32 @@ class FoodViewModel(
                     carbs = currentFood.carbs,
                     sugars = currentFood.sugars
                 )
-
             )
         }
     }
 
-    // Carga los alimentos guardados en la Room
-    fun loadSavedFoods() {
+    fun loadSavedFoods(userEmail: String) {
         viewModelScope.launch {
             savedFoods.value =
-                localRepository.getFoods()
-
+                localRepository.getFoods(userEmail)
         }
     }
 
-    fun deleteFood(foodId: Int) {
+    fun deleteFood(foodId: Int, userEmail: String) {
         viewModelScope.launch {
-            localRepository.deleteFood(foodId)
-
-            loadSavedFoods()
+            localRepository.deleteFood(foodId, userEmail)
+            loadSavedFoods(userEmail)
         }
     }
 
-    fun saveCurrentRecipe() {
+    fun saveCurrentRecipe(userEmail: String) {
         val currentRecipe = food.value ?: return
 
         viewModelScope.launch {
-
             recipeRepository.saveRecipe(
-
                 RecipeEntity(
                     fdcId = currentRecipe.fdcId,
+                    userEmail = userEmail,
                     name = currentRecipe.name,
                     dataType = currentRecipe.dataType,
                     category = currentRecipe.category,
@@ -128,17 +115,17 @@ class FoodViewModel(
         }
     }
 
-    fun loadSavedRecipes() {
+    fun loadSavedRecipes(userEmail: String) {
         viewModelScope.launch {
             savedRecipes.value =
-                recipeRepository.getRecipes()
+                recipeRepository.getRecipes(userEmail)
         }
     }
 
-    fun deleteRecipe(recipeId: Int) {
+    fun deleteRecipe(recipeId: Int, userEmail: String) {
         viewModelScope.launch {
-            recipeRepository.deleteRecipe(recipeId)
-            loadSavedRecipes()
+            recipeRepository.deleteRecipe(recipeId, userEmail)
+            loadSavedRecipes(userEmail)
         }
     }
 }
