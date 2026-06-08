@@ -11,11 +11,11 @@ class RecipeLocalRepository(
         dao.insertRecipe(recipe)
     }
 
-    suspend fun getRecipes(): List<RecipeEntity> {
-        return dao.getAllRecipes()
+    suspend fun getRecipes(userEmail: String): List<RecipeEntity> {
+        return dao.getRecipesByUser(userEmail)
     }
 
-    suspend fun deleteRecipe(recipeId: Int) {
-        dao.deleteRecipe(recipeId)
+    suspend fun deleteRecipe(recipeId: Int, userEmail: String) {
+        dao.deleteRecipe(recipeId, userEmail)
     }
 }
