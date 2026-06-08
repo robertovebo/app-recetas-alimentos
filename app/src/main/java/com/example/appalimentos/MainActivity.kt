@@ -1,12 +1,10 @@
 package com.example.appalimentos
 
-import android.R.attr.text
-import android.graphics.Paint
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.UiThread
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +32,8 @@ import androidx.navigation.compose.composable  //
 import androidx.navigation.compose.rememberNavController  //
 import com.example.appalimentos.ui.navigation.Routes //***********
 import com.example.appalimentos.ui.screens.RecipeSearchScreen
+import com.example.appalimentos.ui.screens.Register
+import com.example.appalimentos.ui.screens.verification
 
 //CLASE MAIN PARA COMPROBAR QUE FUNCIONE
 //CODIGO PENDIENTE DE COMENTAR
@@ -70,7 +70,9 @@ class MainActivity : ComponentActivity() {
 
             /* // Parte de login ignacio
             var currentAuthScreen by remember { mutableStateOf("login") }
-            var userLoggedIn by remember {mutableStateOf(false)}
+            var userLoggedIn by remember { mutableStateOf(false) }
+
+            var emailForVerification by remember {mutableStateOf("")}
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -84,6 +86,20 @@ class MainActivity : ComponentActivity() {
                             onLoginSuccess = {userLoggedIn = true},
                             onNavigateToRegister = {currentAuthScreen = "register"}
                         )
+                        "register" -> Register(
+                            onRegisterSuccess = { registeredEmail->
+                                emailForVerification = registeredEmail
+                                currentAuthScreen = "verification"},
+
+                            onNavigateToLogin = {currentAuthScreen = "login"}
+                        )
+                        "verification" -> verification(
+                            email = emailForVerification,
+                            onVerificationSuccess = {
+                                currentAuthScreen = "login"
+                            }
+                        )
+
                     }
                 }
             }*/
