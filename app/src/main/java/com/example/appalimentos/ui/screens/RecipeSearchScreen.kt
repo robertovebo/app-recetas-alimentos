@@ -12,8 +12,6 @@ import com.example.appalimentos.components.SearchBar
 import com.example.appalimentos.components.navigationBar
 
 import androidx.compose.material3.Text
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appalimentos.components.TittleName
 import com.example.appalimentos.viewmodel.FoodSearchViewModel
@@ -21,13 +19,14 @@ import com.example.appalimentos.viewmodel.FoodViewModel
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Card
-import com.example.appalimentos.components.NutritionCard
 
 import androidx.navigation.NavController // Navigation
 import com.example.appalimentos.components.RecipeNutritionCard
+import com.example.appalimentos.ui.navigation.Routes.createFoodsRoute
+import com.example.appalimentos.ui.navigation.Routes.createProfileRoute
 
 @Composable
-fun RecipeSearchScreen( navController: NavController ) {
+fun RecipeSearchScreen(navController: NavController, userEmail: String) {
 
     var searchText by remember {
         mutableStateOf("")
@@ -131,8 +130,8 @@ fun RecipeSearchScreen( navController: NavController ) {
 
         navigationBar(
             onRecetasClick = {},
-            onAlimentosClick = {navController.navigate("foods")},
-            onPerfilClick = { navController.navigate("profile") }
+            onAlimentosClick = {navController.navigate(createFoodsRoute(userEmail))},
+            onPerfilClick = { navController.navigate(createProfileRoute(userEmail)) }
         )
 
         Spacer(

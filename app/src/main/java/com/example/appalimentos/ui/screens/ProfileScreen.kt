@@ -3,7 +3,6 @@ package com.example.appalimentos.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
@@ -22,12 +21,13 @@ import androidx.navigation.NavController
 import com.example.appalimentos.components.DataProfileTextfield
 import com.example.appalimentos.components.FavoriteFoodCard
 import com.example.appalimentos.components.FavoriteRecipeCard
-import com.example.appalimentos.components.NutritionCard
 import com.example.appalimentos.components.PrimaryButton
 import com.example.appalimentos.components.TittleName
 import com.example.appalimentos.components.navigationBar
 import com.example.appalimentos.data.MySqlConnection
 import com.example.appalimentos.data.UserData
+import com.example.appalimentos.ui.navigation.Routes.createFoodsRoute
+import com.example.appalimentos.ui.navigation.Routes.createRecipesRoute
 
 
 @Composable
@@ -40,6 +40,9 @@ fun ProfileScreen(
 {
 
     val viewModel: FoodViewModel = viewModel()
+
+    val recipes by viewModel.savedRecipes
+
     val db = remember { MySqlConnection() } //CONEXION A BASE DE DATOS
     val foods by viewModel.savedFoods
     var userData by remember {mutableStateOf<UserData?>(null)} //DATOS DEL USUARIO
@@ -157,8 +160,8 @@ fun ProfileScreen(
         )
 
         navigationBar(
-            onRecetasClick = {},
-            onAlimentosClick = { navController.navigate("foods/$userEmail") },
+            onRecetasClick = { navController.navigate(createRecipesRoute(userEmail)) } ,
+            onAlimentosClick = { navController.navigate(createFoodsRoute(userEmail)) },
             onPerfilClick = {}
         )
         Spacer(
