@@ -1,7 +1,6 @@
 package com.example.appalimentos.data
 
 import android.util.Log
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import jakarta.mail.Authenticator
 import jakarta.mail.Message
 import jakarta.mail.PasswordAuthentication
@@ -14,7 +13,6 @@ import java.sql.DriverManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.mindrot.jbcrypt.BCrypt
-import java.sql.Driver
 import java.util.Properties
 import kotlin.random.Random
 

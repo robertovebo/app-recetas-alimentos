@@ -12,8 +12,6 @@ import com.example.appalimentos.components.SearchBar
 import com.example.appalimentos.components.navigationBar
 
 import androidx.compose.material3.Text
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.appalimentos.components.TittleName
 import com.example.appalimentos.viewmodel.FoodSearchViewModel
