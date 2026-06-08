@@ -11,11 +11,11 @@ class FoodLocalRepository(
         dao.insertFood(food)
     }
 
-    suspend fun getFoods(): List<FoodEntity> {
-        return dao.getAllFoods()
+    suspend fun getFoods(userEmail: String): List<FoodEntity> {
+        return dao.getFoodsByUser(userEmail)
     }
 
-    suspend fun deleteFood(foodId: Int) {
-        dao.deleteFood(foodId)
+    suspend fun deleteFood(foodId: Int, userEmail: String) {
+        dao.deleteFood(foodId, userEmail)
     }
 }
